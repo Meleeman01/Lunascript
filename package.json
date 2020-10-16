@@ -4,7 +4,7 @@
   "description": "a lua like language that compiles to javascript",
   "main": "index.js",
   "scripts": {
-    "luna": "node compiler.js"
+    "luna": "node compiler.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
