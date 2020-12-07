@@ -1,2 +1,9 @@
-local x = 1
-print(x)
+global x = 1 --how's this for a comment?
+print x
+
+table = {}
+
+function a()
+    --function body
+end
+
