@@ -1,9 +1,20 @@
 global x = 1 --how's this for a comment?
-print x
+print x 
+
+--[[asdfasdf
+asdfasdfasdf
+asdfasdf
+asdfasdf
+asdfasdf
+%$%&*({})\|]]
+asdfasdf]]--
 
 table = {}
 
-function a()
+function a(x)
     --function body
+    if x > 0 then
+    	print 'yay!'
+    end
 end
 

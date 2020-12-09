@@ -23,15 +23,46 @@ console.log(lexer);
 function parse(input) {
 	let keywords = [];
 	let comment = false;
-
+	//line deleter
+	function deleteLine(line) {
+		line = line.replace(line,'');
+		return line;
+	}
 	//remove comments lol
 	for (let i in input) {
-		if (input[i].includes('--')) {
+		if (!comment) {
+			if (input[i].includes('--')) {
+				if (input[i].includes('--[[')) {
+					//set comment flag to true, as this comment will span multiple lines
+					comment = true;
+					//delete the line with the comment
+					input[i] = deleteLine(input[i]);
+				}
+				else {
+					console.log(input[i]);
+					let index = input[i].indexOf('-');
+					input[i] = input[i].substring(0,index);
+				}
+			}
+		}
+		//once we reach the end of a comment make sure we set the comment flag to false
+		else if(comment && input[i].includes(']]--')) {
+			input[i] = deleteLine(input[i]);
+			comment = false;
+		}
+		else {
+			input[i] = deleteLine(input[i]);
 			console.log(input[i]);
-			let index = input[i].indexOf('-');
-			input[i] = input[i].substring(0,index);
 		}
 	}
+	//after removing all the comments, filter all the entries so that we only process non empty strings.
+	input = input.filter(function(line) {
+		line = line.trim();
+		if (line == '') {
+			return false;
+		}
+		return true;
+	});
 		
 		
 
