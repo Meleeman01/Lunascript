@@ -4,19 +4,24 @@ const file = fs.readFileSync("example.luna","utf8");
 //lexer init
 const lexer = file.toString().split('\n') //produce an AST (abstract syntax tree)
 let variables = {};
-let definitions = [
-	'global','for','do','while','if','then','end','function',
-	'else', 'elseif', 'and', 'or','break','in','return','repeat','until',
-	'true','false','nil','js'
-] //keep a list of definitions for lunascript
+
+let definitions = {
+	global:'global', for:'for', do:'do', while:'while', if:'if', then:'then',
+	end:'end', function:'function', else:'else', elseif:'elseif', and:'and', 
+	or:'or', break:'break', in:'in', return:'return', repeat:'repeat', print:'print',
+	until:'until', true:'true', false:'false', nil:'nil', js:'js'
+} //keep a list of definitions for lunascript
 
 //lunascript tokens
-let tokens = [
-	'+','-','*','/','%','=','==','<=','>=','~=',
-	'>','<',
-	'[',']','{','}','^','..',
+let tokens = {
+	plus:'+', minus:'-', asterisk:'*', backslash:'/',
+	modulus:'%', assign:'=', equals:'==', lessThanEqualTo:'<=',
+	greaterThanEqualTo:'>=', notEqualTo:'~=',
+	greaterThan:'>', lessThan: '<',
+	leftBracket:'[', rightBracket:']',leftCurlyBrace:'{', rightCurlyBrace:'}', 
+	exponent:'^', dotDot:'..',
+}
 
-]
 console.log(lexer);
 
 //parse input
@@ -39,7 +44,7 @@ function parse(input) {
 					input[i] = deleteLine(input[i]);
 				}
 				else {
-					console.log(input[i]);
+					//console.log(input[i]);
 					let index = input[i].indexOf('-');
 					input[i] = input[i].substring(0,index);
 				}
@@ -52,7 +57,7 @@ function parse(input) {
 		}
 		else {
 			input[i] = deleteLine(input[i]);
-			console.log(input[i]);
+			//console.log(input[i]);
 		}
 	}
 	//after removing all the comments, filter all the entries so that we only process non empty strings.
@@ -63,8 +68,20 @@ function parse(input) {
 		}
 		return true;
 	});
-		
-		
+
+	//check all variable definitions
+	for (let line of input) {
+		//console.log(line);
+		let lx = line.split(' ');
+		for (let x of lx) {
+			
+			if (x == definitions[x]) {
+				console.log(x);
+			}
+
+		}
+
+	}
 
 
 

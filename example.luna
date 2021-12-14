@@ -7,14 +7,14 @@ asdfasdf
 asdfasdf
 asdfasdf
 %$%&*({})\|]]
-asdfasdf]]--
+asdfasdf ]]--
 
 table = {}
 
 function a(x)
     --function body
     if x > 0 then
-    	print 'yay!'
+        print 'yay!'
     end
 end
 
