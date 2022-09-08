@@ -1,4 +1,7 @@
+
 global x = 1 --how's this for a comment?
+global %a = 32 -- this should fail
+global print = 3
 print x 
 
 --[[asdfasdf
@@ -9,7 +12,7 @@ asdfasdf
 %$%&*({})\|]]
 asdfasdf ]]--
 
-table = {}
+tble = {}
 
 function a(x)
     --function body
