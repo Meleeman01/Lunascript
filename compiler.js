@@ -3,11 +3,12 @@ const fs = require('fs');
 const file = fs.readFileSync("example.luna","utf8");
 //lexer init
 const lexer = file.toString().split('\n') //produce an AST (abstract syntax tree)
-const variables = {};
+const ast = {};
 const globalVars = [];
 let errorStack = {
 	syntaxError:[],
-	tokenError:[]
+	tokenError:[],
+	assignmentError:[],
 };
 let definitions = {
 	global:'global', for:'for', do:'do', while:'while', if:'if', then:'then',
@@ -26,6 +27,8 @@ let tokens = {
 	'^':'^', '..':'..','(':'(',')':')',
 	'~':'~',
 }
+const types = ['number','nil','boolean','function','string','table']
+
 //regex strings for checking
 const checkWord = new RegExp(/\w\D\S/);
 const checkSpecialChars = new RegExp(/\*|\+|\!|\~|\-|\%|\=/);
@@ -62,6 +65,7 @@ function parse(input) {
 			return false;
 		}else return true;
 	}
+	//might only work for global vars.
 	function checkTokens(termToCheck,line) {
 		let tokenized = termToCheck.split('');
 		for(let t of tokenized) {
@@ -71,6 +75,34 @@ function parse(input) {
 			}else return true;
 		}
 	}
+	function checkVariableAssignment(termToCheck,line) {
+		//check for valid assignments
+		//console.log(typeof termToCheck,'at Term to check!');
+		if (termToCheck[0] == '"' ) {
+			//this means we have a string type now check if the string closes,
+			if (termToCheck[termToCheck.length-1] != '"') {
+				errorStack.assignmentError.push(`:: On line ${findLine(lexer,line)+1} >> ${line}`);
+			}
+			console.log('stringLength:',termToCheck[termToCheck.length-1]);
+		}
+		else if (termToCheck[0] == "'") {
+			if (termToCheck[termToCheck.length-1] != "'") {
+				errorStack.assignmentError.push(`:: On line ${findLine(lexer,line)+1} >> ${line}`)
+			}
+		}
+		else if (termToCheck[0] == '{') {
+			console.log('not supported yet!');
+		}
+		else if (termToCheck = 'function') {
+			console.log('not supported yet!');
+		}
+
+		else if (isNan(Number(termToCheck))) {
+			errorStack.assignmentError.push(`:: On line ${line}`);
+		}
+		else return true
+	}
+
 	//remove comments lol
 	for (let i in input) {
 		if (!comment) {
@@ -117,12 +149,33 @@ function parse(input) {
 			console.log(lx[x]);
 			if (lx[x] == 'global') {
 				//if we see the global key word check the next 
+				if (lx[parseInt(x+1)] == undefined) {
+					errorStack.assignmentError.push(`missing assignment for a global variable:: On Line ${findLine(lexer,input[line])+1} >> ${input[line]}`);
+				}
 				if (typeof lx[parseInt(x+1)] == 'string'){
 					//next should be a variable name.
-					let nextWord = lx[parseInt(x+1)];
-					checkReservedWords(nextWord,input[line]);
-					checkVariableDeclaration(nextWord,input[line]);
-					checkTokens(nextWord,input[line]);
+
+					let firstTerm = lx[parseInt(x+1)];
+					let secondTerm = lx[parseInt(x+2)];
+					let thirdTerm = lx[parseInt(x+3)];
+					
+						//console.log(parseInt(x+2),'checking secondTerm');
+					
+					checkReservedWords(firstTerm,input[line]);
+					checkVariableDeclaration(firstTerm,input[line]);
+					checkTokens(firstTerm,input[line]);
+
+					//if there are no errors, or "global varName"
+					if (secondTerm != '=') {
+						errorStack.assignmentError.push(`missing assignment for a global variable:: On Line ${findLine(lexer,input[line])+1} >> ${input[line]}`);
+					}
+
+					//next is to check the assignment of the variable.
+					console.log(thirdTerm);
+					checkVariableAssignment(thirdTerm,input[line]);
+
+
+
 				}
 			}
 

@@ -1,7 +1,12 @@
 
-global x = 1 --how's this for a comment?
-global %a = 32 -- this should fail
-global print = 3
+--global x  1 --how's this for a comment?
+--global %a = 32 -- this should fail
+--global print = 3
+-- global
+-- global 
+global a = 'function'
+global b = 3*3
+global c = "function"
 print x 
 
 --[[asdfasdf
